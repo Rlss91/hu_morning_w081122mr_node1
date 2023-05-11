@@ -2,12 +2,37 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
+var cors = require("cors");
 const apiRouter = require("./routes/api");
 
 const app = express();
 
-app.use(logger("dev"));
+app.use(cors());
+// app.use(
+//   cors({
+//     origin: "http://127.0.0.1:5500",
+//     optionsSuccessStatus: 200,
+//   })
+// );
+app.use(
+  logger(
+    ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'
+  )
+);
+// app.use(
+//   logger((tokens, req, res) => {
+//     return [
+//       new Date().toISOString().replace("T", " "),
+//       tokens.method(req, res),
+//       tokens.url(req, res),
+//       tokens.status(req, res),
+//       tokens.res(req, res, "content-length"),
+//       "-",
+//       tokens["response-time"](req, res),
+//       "ms",
+//     ].join(" ");
+//   })
+// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
