@@ -7,6 +7,11 @@ const createCardSchema = Joi.object({
   phone: Joi.string()
     .regex(new RegExp(/0[0-9]{1,2}\-?\s?[0-9]{3}\s?[0-9]{4}/))
     .required(),
+  email: Joi.string()
+    .regex(
+      new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/)
+    )
+    .required(),
   web: Joi.string()
     .regex(
       new RegExp(
