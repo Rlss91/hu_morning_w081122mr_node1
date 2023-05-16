@@ -6,6 +6,16 @@ const createCard = (cardToSave) => {
   return card.save();
 };
 
+const getAllCards = () => {
+  return Card.find();
+};
+
+const getCardById = (id) => {
+  return Card.findById(id);
+};
+
 module.exports = {
   createCard,
+  getAllCards,
+  getCardById,
 };
