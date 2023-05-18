@@ -8,6 +8,7 @@ const {
 const normalizeUser = require("../../model/users/helpers/normalizationUser");
 const usersServiceModel = require("../../model/users/usersService");
 const { generateToken } = require("../../config/jwt");
+const CustomError = require("../../utils/CustomError");
 
 //http://localhost:8181/api/auth/register
 router.post("/register", async (req, res) => {
@@ -42,12 +43,13 @@ router.post("/login", async (req, res) => {
      */
     await loginUserValidation(req.body);
     const userData = await usersServiceModel.getUserByEmail(req.body.email);
-    if (!userData) throw new Error("invalid email and/or password");
+    if (!userData) throw new CustomError("invalid email and/or password");
     const isPasswordMatch = await bcrypt.cmpHash(
       req.body.password,
       userData.password
     );
-    if (!isPasswordMatch) throw new Error("invalid email and/or password");
+    if (!isPasswordMatch)
+      throw new CustomError("invalid email and/or password");
     const token = await generateToken({
       _id: userData._id,
       isAdmin: userData.isAdmin,
