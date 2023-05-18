@@ -3,8 +3,10 @@ const router = express.Router();
 const cardsServiceModel = require("../../model/cards/cardsService");
 const cardsValidationService = require("../../validation/cardsValidationService");
 const normalizeCard = require("../../model/cards/helpers/normalizationCard");
+const authmw = require("../../middleware/authMiddleware");
 
-router.post("/", async (req, res) => {
+// biz only
+router.post("/", authmw, async (req, res) => {
   try {
     await cardsValidationService.createCardValidation(req.body);
     let normalCard = await normalizeCard(req.body, "6460db599d17caea8cecb4d0");
@@ -16,6 +18,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// all
 router.get("/", async (req, res) => {
   try {
     const allCards = await cardsServiceModel.getAllCards();
@@ -25,6 +28,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// all
 router.get("/:id", async (req, res) => {
   try {
     //! joi validation
@@ -35,6 +39,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// specific biz or admin
 router.put("/:id", async (req, res) => {
   try {
     //! joi validation
@@ -49,6 +54,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// admin or specific biz
 router.delete("/:id", async (req, res) => {
   try {
     //! joi validation
