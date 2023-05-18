@@ -2,10 +2,14 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-var cors = require("cors");
+const cors = require("cors");
 const apiRouter = require("./routes/api");
+const config = require("config");
 
 const app = express();
+
+console.log("file", config.get("file"));
+// console.log("anotherKey", config.get("anotherKey"));
 
 app.use(cors());
 // app.use(
