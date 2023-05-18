@@ -7,6 +7,7 @@ const {
 } = require("../../validation/authValidationService");
 const normalizeUser = require("../../model/users/helpers/normalizationUser");
 const usersServiceModel = require("../../model/users/usersService");
+const { generateToken } = require("../../config/jwt");
 
 //http://localhost:8181/api/auth/register
 router.post("/register", async (req, res) => {
@@ -33,13 +34,26 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     /**
-     * joi
-     * get user from database
-     * check password
-     * create token
-     * send to user
+     * *joi
+     * *get user from database
+     * *check password
+     * *create token
+     * *send to user
      */
     await loginUserValidation(req.body);
+    const userData = await usersServiceModel.getUserByEmail(req.body.email);
+    if (!userData) throw new Error("invalid email and/or password");
+    const isPasswordMatch = await bcrypt.cmpHash(
+      req.body.password,
+      userData.password
+    );
+    if (!isPasswordMatch) throw new Error("invalid email and/or password");
+    const token = await generateToken({
+      _id: userData._id,
+      isAdmin: userData.isAdmin,
+      isBusiness: userData.isBusiness,
+    });
+    res.json({ token });
   } catch (err) {
     res.status(400).json(err);
   }
