@@ -1,6 +1,6 @@
 const Card = require("./Card");
 
-const createCard = async (cardToSave) => {
+const createCard = (cardToSave) => {
   let card = new Card(cardToSave);
   return card.save();
 };
