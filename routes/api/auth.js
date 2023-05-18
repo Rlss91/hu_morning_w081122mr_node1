@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("../../config/bcrypt");
 const {
   registerUserValidation,
+  loginUserValidation,
 } = require("../../validation/authValidationService");
 const normalizeUser = require("../../model/users/helpers/normalizationUser");
 const usersServiceModel = require("../../model/users/usersService");
@@ -29,8 +30,19 @@ router.post("/register", async (req, res) => {
 });
 
 //http://localhost:8181/api/auth/login
-router.post("/login", (req, res) => {
-  res.json({ msg: "login" });
+router.post("/login", async (req, res) => {
+  try {
+    /**
+     * joi
+     * get user from database
+     * check password
+     * create token
+     * send to user
+     */
+    await loginUserValidation(req.body);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 module.exports = router;
