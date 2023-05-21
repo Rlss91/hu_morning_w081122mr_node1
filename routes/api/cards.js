@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const cardsServiceModel = require("../../model/cards/cardsService");
 const cardsValidationService = require("../../validation/cardsValidationService");
+const permissionsMiddleware = require("../../middleware/permissionsMiddleware");
 const normalizeCard = require("../../model/cards/helpers/normalizationCard");
 const authmw = require("../../middleware/authMiddleware");
 
@@ -9,7 +10,7 @@ const authmw = require("../../middleware/authMiddleware");
 router.post("/", authmw, async (req, res) => {
   try {
     await cardsValidationService.createCardValidation(req.body);
-    let normalCard = await normalizeCard(req.body, "6460db599d17caea8cecb4d0");
+    let normalCard = await normalizeCard(req.body, req.userData._id);
     const dataFromMongoose = await cardsServiceModel.createCard(normalCard);
     console.log("dataFromMongoose", dataFromMongoose);
     res.json({ msg: "ok" });
@@ -39,7 +40,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// specific biz or admin
+// admin or biz owner
 router.put("/:id", async (req, res) => {
   try {
     //! joi validation
@@ -54,19 +55,34 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// admin or specific biz
-router.delete("/:id", async (req, res) => {
-  try {
-    //! joi validation
-    const cardFromDB = await cardsServiceModel.deleteCard(req.params.id);
-    if (cardFromDB) {
-      res.json({ msg: "card deleted" });
-    } else {
-      res.json({ msg: "could not find the card" });
+// admin or biz owner
+router.delete(
+  "/:id",
+  authmw,
+  permissionsMiddleware(false, true, true),
+  async (req, res) => {
+    try {
+      //! joi validation
+      const cardFromDB = await cardsServiceModel.deleteCard(req.params.id);
+      if (cardFromDB) {
+        res.json({ msg: "card deleted" });
+      } else {
+        res.json({ msg: "could not find the card" });
+      }
+    } catch (err) {
+      res.status(400).json(err);
     }
-  } catch (err) {
-    res.status(400).json(err);
   }
-});
+);
+
+/*
+  under the hood
+  let permissionsMiddleware2 = permissionsMiddleware(false, true, false)
+  router.delete(
+  "/:id",
+  authmw,
+  permissionsMiddleware2,
+  (req, res)=>{- - -});
+*/
 
 module.exports = router;
