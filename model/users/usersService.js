@@ -9,7 +9,12 @@ const getUserByEmail = (email) => {
   return User.findOne({ email });
 };
 
+const getAllUsers = () => {
+  return User.find();
+};
+
 module.exports = {
   registerUser,
   getUserByEmail,
+  getAllUsers,
 };
