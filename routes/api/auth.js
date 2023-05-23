@@ -5,9 +5,9 @@ const {
   registerUserValidation,
   loginUserValidation,
 } = require("../../validation/authValidationService");
-const normalizeUser = require("../../model/users/helpers/normalizationUser");
-const usersServiceModel = require("../../model/users/usersService");
-const { generateToken } = require("../../config/jwt");
+const normalizeUser = require("../../model/usersService/helpers/normalizationUserService");
+const usersServiceModel = require("../../model/usersService/usersService");
+const { generateToken } = require("../../utils/token/tokenService");
 const CustomError = require("../../utils/CustomError");
 
 //http://localhost:8181/api/auth/register

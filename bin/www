@@ -8,9 +8,9 @@ var app = require("../app");
 var debug = require("debug")("server:server");
 var http = require("http");
 const chalk = require("chalk");
-const connectToDB = require("../model/connectToDB");
+const connectToDBService = require("../model/connectToDBService");
 
-connectToDB
+connectToDBService()
   .then(() => {
     console.log(chalk.cyan.bold("connected to mongo"));
   })

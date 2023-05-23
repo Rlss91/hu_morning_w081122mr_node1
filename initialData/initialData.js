@@ -1,8 +1,8 @@
-const usersService = require("../model/users/usersService");
-const cardsService = require("../model/cards/cardsService");
+const usersService = require("../model/usersService/usersService");
+const cardsService = require("../model/cardsService/cardsService");
 const hashService = require("../utils/hash/hashService");
-const normalizeUser = require("../model/users/helpers/normalizationUser");
-const normalizeCard = require("../model/cards/helpers/normalizationCard");
+const normalizeUser = require("../model/usersService/helpers/normalizationUserService");
+const normalizeCard = require("../model/cardsService/helpers/normalizationCardService");
 
 const usersData = require("./users.json");
 const cardsData = require("./cards.json");

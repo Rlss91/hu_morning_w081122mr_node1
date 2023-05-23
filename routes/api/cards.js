@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const cardsServiceModel = require("../../model/cards/cardsService");
+const cardsServiceModel = require("../../model/cardsService/cardsService");
+const normalizeCard = require("../../model/cardsService/helpers/normalizationCardService");
 const cardsValidationService = require("../../validation/cardsValidationService");
 const permissionsMiddleware = require("../../middleware/permissionsMiddleware");
-const normalizeCard = require("../../model/cards/helpers/normalizationCard");
 const authmw = require("../../middleware/authMiddleware");
 
 // biz only

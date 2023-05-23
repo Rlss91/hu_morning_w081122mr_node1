@@ -1,5 +1,5 @@
 const CustomError = require("../utils/CustomError");
-const { getCardById } = require("../model/cards/cardsService");
+const { getCardById } = require("../model/cardsService/cardsService");
 /*
     TODO:
         finish isBizSpecific
