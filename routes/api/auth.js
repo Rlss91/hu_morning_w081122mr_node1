@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("../../config/bcrypt");
+const hashService = require("../../utils/hash/hashService");
 const {
   registerUserValidation,
   loginUserValidation,
@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
      * response user created
      */
     await registerUserValidation(req.body);
-    req.body.password = await bcrypt.generateHash(req.body.password);
+    req.body.password = await hashService.generateHash(req.body.password);
     req.body = normalizeUser(req.body);
     await usersServiceModel.registerUser(req.body);
     res.json({ msg: "register" });
@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
     await loginUserValidation(req.body);
     const userData = await usersServiceModel.getUserByEmail(req.body.email);
     if (!userData) throw new CustomError("invalid email and/or password");
-    const isPasswordMatch = await bcrypt.cmpHash(
+    const isPasswordMatch = await hashService.cmpHash(
       req.body.password,
       userData.password
     );
